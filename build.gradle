@@ -1,0 +1,73 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '1.5.6.RELEASE'
+    id "org.akhikhl.gretty" version "1.4.0"
+}
+
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: "org.springframework.boot"
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'org.akhikhl.gretty'
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.thymeleaf:thymeleaf-spring4")
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+bootRun {
+    addResources = true
+}
+
+springBoot {
+    backupSource = false
+}
+
+bootRepackage {
+    mainClass = 'com.tracknix.SpringBootWebApplication'
+}
+
+war {
+    baseName = 'CrossDomain'
+    version = '1.0.0-BETA'
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+}
+
+subprojects {
+    group = 'com.tracknix'
+    version = '1.0.0-BETA'
+}
+
+gretty {
+    httpEnabled = true
+    httpPort = 9967
+    contextPath = '/'
+}
